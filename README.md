@@ -21,6 +21,6 @@ Install Vega-Embed to your app.
 
 ```razor
 
-<VegaEmbedView VegaSpecJson="@vegaSpecJson" Options="@embedOptions" />
+<VegaEmbedView SpecJson="@vegaSpecJson" Options="@embedOptions" />
 
 ```

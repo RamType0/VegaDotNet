@@ -1,0 +1,37 @@
+﻿@using System.Text.Json.Serialization
+@using System.Text.Json
+<script type="importmap">
+@importMapJson
+</script>
+
+
+@code{
+    [Parameter]
+    public string EsModuleUrl { get; set; } = "https://cdn.jsdelivr.net/npm/vega-embed@7.0.2/+esm";
+
+    string importMapJson = "";
+
+    protected override void OnParametersSet()
+    {
+        importMapJson = JsonSerializer.Serialize(new ImportMap
+            {
+                Imports = new()
+                {
+                    VegaEmbed = EsModuleUrl,
+                },
+            });
+
+    }
+
+    record struct ImportMap
+    {
+        [JsonPropertyName("imports")]
+        public Imports Imports { get; init; }
+    }
+
+    record struct Imports
+    {
+        [JsonPropertyName("vega-embed")]
+        public string VegaEmbed { get; init; }    
+    }
+}

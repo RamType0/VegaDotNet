@@ -1,3 +1,4 @@
+import vegaEmbed from 'https://cdn.jsdelivr.net/npm/vega-embed@7.0.2/+esm';
 export function afterWebStarted(blazor) {
     customElements.define("vega-embed-view", class extends HTMLElement {
         static observedAttributes = ["parameters"];

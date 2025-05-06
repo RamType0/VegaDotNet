@@ -1,13 +1,6 @@
-﻿import { IBlazorWeb } from "../TypeScript/blazor";
+﻿import vegaEmbed, { Result } from 'https://cdn.jsdelivr.net/npm/vega-embed@7.0.2/+esm';
+import { IBlazorWeb } from "../TypeScript/blazor";
 
-import { VisualizationSpec, EmbedOptions, Result } from "vega-embed/build/embed";
-
-
-declare function vegaEmbed(
-    el: HTMLElement | string,
-    spec: VisualizationSpec | string,
-    opts?: EmbedOptions,
-): Promise<Result>;
 
 export function afterWebStarted(blazor: IBlazorWeb) {
     customElements.define("vega-embed-view", class extends HTMLElement {
@@ -17,6 +10,7 @@ export function afterWebStarted(blazor: IBlazorWeb) {
         resultPromise?: Promise<Result>;
 
         async attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+
 
             await this.finalizeCurrentResult();
 

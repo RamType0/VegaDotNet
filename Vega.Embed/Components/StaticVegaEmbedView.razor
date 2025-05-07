@@ -1,0 +1,35 @@
+﻿@using System.Text.Json
+@using System.Text.Json.Serialization
+<static-vega-embed-view parameters="@jsParametersJson" />
+
+@code {
+    [Parameter]
+    public string? SpecJson { get; set; }
+    [Parameter]
+    public Uri? SpecUrl { get; set; }
+    [Parameter]
+    public EmbedOptions? Options { get; set; }
+    string? jsParametersJson;
+
+    protected override void OnParametersSet()
+    {
+        JsParameters jsParameters = new()
+            {
+                SpecJson = SpecJson,
+                SpecUrl = SpecUrl,
+                Options = Options,
+            };
+        jsParametersJson = JsonSerializer.Serialize(jsParameters, JsonSerializerOptions.Web);
+    }
+
+    struct JsParameters
+    {
+        [JsonPropertyName("specJson")]
+        public string? SpecJson { get; init; }
+        [JsonPropertyName("specUrl")]
+        public Uri? SpecUrl { get; init; }
+        [JsonPropertyName("options")]
+        public EmbedOptions? Options { get; init; }
+    }
+
+}

@@ -1,41 +1,43 @@
-﻿import vegaEmbed, { Result } from 'https://cdn.jsdelivr.net/npm/vega-embed@7.0.2/+esm';
+﻿import vegaEmbed, { Result } from "vega-embed";
+import { Mutex } from "await-semaphore";
 import { IBlazorWeb } from "../TypeScript/blazor";
 
-
 export function afterWebStarted(blazor: IBlazorWeb) {
-    customElements.define("vega-embed-view", class extends HTMLElement {
+    customElements.define("static-vega-embed-view", class extends HTMLElement {
         static observedAttributes = ["parameters"];
 
+        mutex: Mutex = new Mutex();
+        result?: Result;
+        componentId?: string;
+        attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
 
-        resultPromise?: Promise<Result>;
+            return this.mutex.use(async () => {
+                this.finalizeCurrentResult();
 
-        async attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+                if (newValue !== null) {
+                    const { componentid, specJson, specUrl, options } = JSON.parse(newValue);
 
+                    this.componentId = componentid;
 
-            await this.finalizeCurrentResult();
-
-            if (newValue !== null) {
-                const { specJson, specUrl, options } = JSON.parse(newValue);
-                let spec = specJson === null ? undefined : JSON.parse(specJson);
-                spec ??= specUrl;
-                this.resultPromise = vegaEmbed(this, spec, options);
-            }
+                    let spec = specJson === null ? undefined : JSON.parse(specJson);
+                    spec ??= specUrl;
+                    this.result = await vegaEmbed(this, spec, options);
+                }
+            });
         }
 
         disconnectedCallback() {
-            return this.finalizeCurrentResult();
+            return this.mutex.use(async () => {
+                this.finalizeCurrentResult();
+            });
         }
 
 
-        async finalizeCurrentResult() {
-
-            const resultPromise = this.resultPromise;
-            if (resultPromise !== undefined) {
-                this.resultPromise = undefined;
-                const result = await resultPromise;
-                result.finalize();
+        finalizeCurrentResult() {
+            if (this.result !== undefined) {
+                this.result.finalize();
+                this.result = undefined;
             }
-            
         }
     });
 

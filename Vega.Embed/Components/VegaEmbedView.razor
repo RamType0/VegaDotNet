@@ -1,7 +1,11 @@
-﻿@using System.Text.Json
-@using System.Text.Json.Serialization
-
-<vega-embed-view parameters="@jsParametersJson"/>
+﻿@if (this.RendererInfo.IsInteractive)
+{
+    <InteractiveVegaEmbedView SpecJson="@SpecJson" SpecUrl="@SpecUrl" Options="@Options" />
+}
+else
+{
+    <StaticVegaEmbedView SpecJson="@SpecJson" SpecUrl="@SpecUrl" Options="@Options"/>   
+}
 
 @code {
     [Parameter]
@@ -10,32 +14,4 @@
     public Uri? SpecUrl { get; set; }
     [Parameter]
     public EmbedOptions? Options { get; set; }
-    string? jsParametersJson;
-    protected override void OnParametersSet()
-    {
-        JsParameters jsParameters = new()
-            {
-                SpecJson = SpecJson,
-                SpecUrl = SpecUrl,
-                Options = Options,
-            };
-#if NET9_0_OR_GREATER
-        jsParametersJson = JsonSerializer.Serialize(jsParameters, JsonSerializerOptions.Web);
-#else
-
-        jsParametersJson = JsonSerializer.Serialize(jsParameters);
-#endif
-
-    }
-
-    struct JsParameters
-    {
-        [JsonPropertyName("specJson")]
-        public string? SpecJson { get; init; }
-        [JsonPropertyName("specUrl")]
-        public Uri? SpecUrl { get; init; }
-        [JsonPropertyName("options")]
-        public EmbedOptions? Options { get; init; }
-    }
-
 }

@@ -44,6 +44,5 @@
     <Exec Command="npm run build" />
   </Target>
 	
-  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

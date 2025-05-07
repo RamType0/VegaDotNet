@@ -1,5 +1,5 @@
 ﻿import vegaEmbed, { Result } from "vega-embed";
-import { Mutex } from "await-semaphore";
+import { Mutex } from "async-mutex";
 import { IBlazorWeb } from "../TypeScript/blazor";
 
 export function afterWebStarted(blazor: IBlazorWeb) {
@@ -11,23 +11,24 @@ export function afterWebStarted(blazor: IBlazorWeb) {
         componentId?: string;
         attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
 
-            return this.mutex.use(async () => {
+            return this.mutex.runExclusive(async () => {
                 this.finalizeCurrentResult();
 
                 if (newValue !== null) {
-                    const { componentid, specJson, specUrl, options } = JSON.parse(newValue);
+                    let { componentid, specJson, specUrl, options } = JSON.parse(newValue);
 
                     this.componentId = componentid;
 
                     let spec = specJson === null ? undefined : JSON.parse(specJson);
                     spec ??= specUrl;
+                    options ??= undefined;
                     this.result = await vegaEmbed(this, spec, options);
                 }
             });
         }
 
         disconnectedCallback() {
-            return this.mutex.use(async () => {
+            return this.mutex.runExclusive(async () => {
                 this.finalizeCurrentResult();
             });
         }

@@ -24,7 +24,7 @@ partial class InteractiveVegaEmbedView : IAsyncDisposable
     protected override void OnInitialized()
     {
         moduleTask = new(() => JsRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./_content/Vega.Embed/Components/InteractiveVegaEmbedView.razor.js").AsTask());
+                "import", "./_content/Vega.Embed/lib/vegaEmbed.js").AsTask());
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

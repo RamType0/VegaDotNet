@@ -15,10 +15,6 @@
 	<VersionPrefix>0.3.2</VersionPrefix>
   </PropertyGroup>
 
-  <ItemGroup>
-
-  </ItemGroup>
-
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />

@@ -364,5 +364,6 @@ FodyWeavers.xsd
 
 # TypeScript compiler generated files
 *.js
-*.mjs
 *.js.map
+*.mjs
+*.mjs.map

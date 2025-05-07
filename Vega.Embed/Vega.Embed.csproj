@@ -12,7 +12,7 @@
 	<Description>Vega-Embed integration for Blazor</Description>
     <PackageTags>Vega, Vega-Lite, Vega-Embed, aspnetcore, components, Blazor</PackageTags>
     <Copyright>© RamType0</Copyright>
-	<VersionPrefix>0.3.2</VersionPrefix>
+	<VersionPrefix>0.3.3</VersionPrefix>
   </PropertyGroup>
 
 

@@ -23,6 +23,10 @@ partial class InteractiveVegaEmbedView : IAsyncDisposable
 
     protected override void OnInitialized()
     {
+        if (!RendererInfo.IsInteractive)
+        {
+            throw new InvalidOperationException($"{nameof(InteractiveVegaEmbedView)} must be used in interactive platform.");
+        }
         moduleTask = new(() => JsRuntime.InvokeAsync<IJSObjectReference>(
                 "import", "./_content/Vega.Embed/lib/vegaEmbed.js").AsTask());
     }

@@ -34,13 +34,9 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-	
-    <Content Remove="package.json" />
-    <TypeScriptCompile Include="package.json" />
-	<Content Remove="package-lock.json" />
-    <TypeScriptCompile Include="package-lock.json" />
-    <Content Remove="tsconfig.json" />
-    <TypeScriptCompile Include="tsconfig.json" />
+	<Content Remove="package*.json;tsconfig.json"/>
+    <TypeScriptCompile Include="package*.json;tsconfig.json"/>
+	<Content Remove="esbuild.config.mjs"/>
   </ItemGroup>
 	
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
